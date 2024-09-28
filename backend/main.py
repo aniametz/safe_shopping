@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from pathlib import Path
 import sqlite3
 
 app = Flask(__name__)
@@ -12,15 +13,15 @@ def hello():
     return jsonify("hello")
 
 
-app.route("/validateAdressInDb", methods=["POST"])
+@app.route("/validateAdressInDb", methods=["POST"])
 def validate_address_in_db():
     data = request.json
     url = data.get("url")
-    conn = sqlite3.connect()
+    conn = sqlite3.connect(Path(__file__).parent.joinpath("urls_db"))
     curr = conn.cursor()
     result = curr.execute(
-        "SELECT COUNT(*) FROM urls WHERE url = ?", (url,)
-    )
+        "SELECT COUNT(*) FROM urls_table WHERE url = ?", (url,)
+    ).fetchall()
     conn.close()
     return result
 
@@ -40,4 +41,4 @@ def check_site():
     return jsonify({'url': url_to_check, 'is_listed': is_listed})
 
 if __name__=='__main__':
-    app.run(host='localhost', port=5000) 
+    app.run(host='localhost', port=5000)
