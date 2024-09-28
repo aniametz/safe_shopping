@@ -76,13 +76,13 @@ export default function UrlPasteBar(): JSX.Element {
         <div style={{paddingLeft: '0.5em'}}>
           <Tooltip title='We will search for risks on your website'>
         <Button variant="contained" color="primary" onClick={validateInputUrl}>
-          Scan
+          Scan for risks
         </Button></Tooltip>
         </div>
         </div>
         <p style={{ color: OurColors.red }}>{inputError}</p>
       </Container>
-      {firstScanResult && <ResultContainer isSafe={true} />}
+      {firstScanResult && <ResultContainer isSafe={false} url={urlToCheck ?? 'https://hello.com/123/'} />}
       {firstScanResult && <Dashboard />}
     </div>
   );
