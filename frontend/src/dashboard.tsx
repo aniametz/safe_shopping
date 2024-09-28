@@ -1,61 +1,96 @@
-import CloseIcon from '@mui/icons-material/Close';
-import DoneIcon from '@mui/icons-material/Done';
-import WarningIcon from '@mui/icons-material/Warning';
-import { Chip, Container, Tooltip, Typography } from '@mui/material';
+import CloseIcon from "@mui/icons-material/Close";
+import DoneIcon from "@mui/icons-material/Done";
+import WarningIcon from "@mui/icons-material/Warning";
+import { Chip, Container, Typography } from "@mui/material";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { backend_port } from "./constants";
 
-export default function Dashboard(): JSX.Element {
+interface MarkerType {
+  label: string;
+  status: string | boolean;
+}
 
-    const mockMarkers = [
-        {label: 'marker1', status: 'green', moreInfo: 'More information about this marker'},
-        {label: 'marker2', status: 'yellow', moreInfo: 'More information about this marker'},
-        {label: 'marker3', status: 'green', moreInfo: 'More information about this marker'},
-        {label: 'marker4', status: 'red', moreInfo: 'More information about this marker'},
-        {label: 'marker5', status: 'green', moreInfo: 'More information about this marker'},
-        {label: 'marker6', status: 'green', moreInfo: 'More information about this marker'},
-        {label: 'marker7', status: 'green', moreInfo: 'More information about this marker'}
-    ]
+export interface DashboardProps {
+  readonly isSafe: boolean;
+  readonly url: string;
+}
 
-    const chipMapping = [
-        {status: 'green', icon: <DoneIcon/>, color: 'success'},
-        {status: 'yellow', icon: <WarningIcon/>, color: 'warning'},
-        {status: 'red', icon: <CloseIcon/>, color: 'error'}
-    ]
+export default function Dashboard(props: DashboardProps): JSX.Element {
+  const { isSafe, url } = props;
+  const [markers, setMarkers] = useState<MarkerType[]>();
 
-    return <Container style={{paddingBottom: '5em'}}>
-        <Typography variant='h6' style={{paddingBottom: '1em'}}>How we know this:</Typography>
-        <div style={{display: 'flex', flexFlow: 'column'}}>
-        {mockMarkers.map((marker) => {
-            const chipAttributes = chipMapping.find((chipMap) => chipMap.status === marker.status)
+  useEffect(() => {
+    if (!isSafe) setMarkers([{ label: "blacklisted", status: false }]);
+    else
+      axios
+        .post(backend_port + "calculateSiteMarkers", {
+          url: url,
+        })
+        .then((response) => {
+          console.log(response.data);
+          const result = Object.entries(response.data).map(
+            ([key, value]) => ({ label: key, status: value } as MarkerType)
+          );
+          console.log({ result });
+          setMarkers(result);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+  }, [isSafe, url]);
+
+  const chipMapping = [
+    { status: true, icon: <DoneIcon />, color: "success" },
+    { status: "warning", icon: <WarningIcon />, color: "warning" },
+    { status: false, icon: <CloseIcon />, color: "error" },
+  ];
+
+  return (
+    <Container style={{ paddingBottom: "5em" }}>
+      <Typography variant="h6" style={{ paddingBottom: "1em" }}>
+        How we know this:
+      </Typography>
+      <div style={{ display: "flex", flexFlow: "column" }}>
+        {markers &&
+          markers.map((marker) => {
+            const chipAttributes = chipMapping.find(
+              (chipMap) => chipMap.status === marker.status
+            );
             // I was forced by TypeScript to do this, I'm sorry
-            const chipColor = chipAttributes?.color === 'success' ? 'success' 
-            : chipAttributes?.color === 'warning' 
-            ? 'warning' : 'error'
+            const chipColor =
+              chipAttributes?.color === "success"
+                ? "success"
+                : chipAttributes?.color === "warning"
+                ? "warning"
+                : "error";
 
             return (
-            <div style={{paddingBottom: '1em'}} key={marker.label}>
-                <Tooltip title={marker.moreInfo}>
-            <Chip 
-            label={marker.label}
-            icon={chipAttributes?.icon}
-            color={chipColor}
-            style={{maxWidth: '40em'}}
-            variant='outlined'
-            />
-                </Tooltip>
-            </div>)
-        })}</div>
-        </Container>
+              <div style={{ paddingBottom: "1em" }} key={marker.label}>
+                <Chip
+                  label={marker.label}
+                  icon={chipAttributes?.icon}
+                  color={chipColor}
+                  style={{ maxWidth: "40em" }}
+                  variant="outlined"
+                />
+              </div>
+            );
+          })}
+      </div>
+    </Container>
+  );
 }
 
 // Alternative design of chips (colored icons)
-// const chipColor = chipAttributes?.color === 'success' ? "#a8c256" 
-//             : chipAttributes?.color === 'warning' 
+// const chipColor = chipAttributes?.color === 'success' ? "#a8c256"
+//             : chipAttributes?.color === 'warning'
 //             ? "#ff9505" : "#ff5a5f"
 
 //             return (
 //             <div style={{paddingBottom: '1em'}}>
 //                 <Tooltip title={marker.moreInfo}>
-//                     <Chip 
+//                     <Chip
 //                     label={marker.label}
 //                     icon={chipAttributes?.icon}
 //                     // color={chipColor}
