@@ -1,18 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
+import Dashboard from './dashboard';
+import ResultContainer from './result-container';
+
 export default function UrlPasteBar(): JSX.Element {
-    return <Container>
+    const [isFirstScanDone, setIsFirstScanDone] = useState<boolean>(false)
+
+    function handleScanClick(): void {
+        setIsFirstScanDone(true)
+    }
+
+    return <div>
+        <Container style={{paddingBottom: '3em'}}>
         <Typography variant='h4' style={{ padding: '1em'}}>
          Question?
        </Typography>
         <TextField id="outlined-basic" label="Paste link here..." variant="outlined" />
-        <Button variant='contained' color='primary'>Scan</Button>
+        <Button variant='contained' color='primary' onClick={() => handleScanClick()}>Scan</Button>
     </Container>
+    {isFirstScanDone && <ResultContainer isSafe={true}/>}
+    {isFirstScanDone && <Dashboard/>}
+    </div>
 }
 
 //       <Container style={{display: 'flex', flexDirection: 'row'}} color='primary'>
