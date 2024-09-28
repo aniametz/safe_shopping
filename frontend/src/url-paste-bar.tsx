@@ -1,47 +1,82 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
-import Dashboard from './dashboard';
-import ResultContainer from './result-container';
+import axios from "axios";
+import { backend_port } from "./constants";
+import Dashboard from "./dashboard";
+import ResultContainer from "./result-container";
+import { OurColors } from "./theme";
 
-export default function UrlPasteBar(): JSX.Element {
-    const [isFirstScanDone, setIsFirstScanDone] = useState<boolean>(false)
-
-    function handleScanClick(): void {
-        setIsFirstScanDone(true)
-    }
-
-    return <div>
-        <Container style={{paddingBottom: '3em'}}>
-        <Typography variant='h4' style={{ padding: '1em'}}>
-         Question?
-       </Typography>
-        <TextField id="outlined-basic" label="Paste link here..." variant="outlined" />
-        <Button variant='contained' color='primary' onClick={() => handleScanClick()}>Scan</Button>
-    </Container>
-    {isFirstScanDone && <ResultContainer isSafe={true}/>}
-    {isFirstScanDone && <Dashboard/>}
-    </div>
+function isValidUrl(url: string): boolean {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
-//       <Container style={{display: 'flex', flexDirection: 'row'}} color='primary'>
-//         <Button variant='contained'>Primary Contained</Button>
-//         <Button variant='outlined'>Primary Outlined</Button>
-//         <Button>Primary Text</Button>
-//         </Container>
-//         <Container>
-//         <div style={{display: 'flex', flexDirection: 'row'}}>
-//         <Button variant='contained' color='secondary'>Secondary Contained</Button>
-//         <Button variant='outlined' color='secondary'>Secondary Outlined</Button>
-//         <Button color='secondary'>Secondary Text</Button>
-//         </div></Container>
-//         <Container>
-//         <div style={{display: 'flex', flexDirection: 'row'}}>
-//         <Button variant='contained' color='success'>This is safe!</Button>
-//         <Button variant='contained' color='error'>This is fake!</Button>
-//         <Button variant='contained' color='warning'>This is warning!</Button>
-//         </div></Container>
+export default function UrlPasteBar(): JSX.Element {
+  const [urlToCheck, setUrlToCheck] = useState<string>();
+  const [inputError, setInputError] = useState<string>();
+  const [firstScanResult, setFirstScanResult] = useState<boolean>();
+
+  const validateInputUrl = () => {
+    if (!urlToCheck) setInputError("Provided link is empty");
+    else if (!isValidUrl(urlToCheck))
+      setInputError(
+        "Provided link is not a valid url. Please check for typos."
+      );
+    else {
+      setInputError("");
+      handleFirstScan();
+    }
+  };
+
+  setTimeout(() => setInputError(""), 10000);
+
+  const handleFirstScan = () => {
+    axios
+      .post(backend_port + "validateAdressInDb", {
+        url: urlToCheck,
+      })
+      .then((response) => {
+        console.log(response.data);
+        const result = response.data as boolean;
+        setFirstScanResult(result);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  console.log({ urlToCheck });
+
+  return (
+    <div>
+      <Container style={{ paddingBottom: "3em" }}>
+        <Typography variant="h4" style={{ padding: "1em" }}>
+          Question?
+        </Typography>
+        <TextField
+          id="outlined-basic"
+          label="Paste link here..."
+          variant="outlined"
+          onChange={(e) => {
+            setUrlToCheck(e.target.value);
+          }}
+        />
+        <Button variant="contained" color="primary" onClick={validateInputUrl}>
+          Scan
+        </Button>
+        <p style={{ color: OurColors.red }}>{inputError}</p>
+      </Container>
+      {firstScanResult && <ResultContainer isSafe={true} />}
+      {firstScanResult && <Dashboard />}
+    </div>
+  );
+}
