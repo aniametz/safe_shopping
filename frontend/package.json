@@ -26,12 +26,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "backend": "cd ../backend && flask --app main run",
-    "dev": "concurrently \"npm run backend\" \"npm start\"",
-    "compile:electron": "tsc --target es5 electron-config.ts",
-    "dev:electron": "cross-env NODE_ENV=development electron --trace-warnings .",
-    "start:electron": "electron --trace-warnings .",
-    "build:electron": "npm run build && npm run start:electron",
-    "package:electron": "npm run build && electron-packager . App --platform=win32 --arch:x64 --out:dist/ --overwrite"
+    "dev": "concurrently \"npm run backend\" \"npm start\""
   },
   "eslintConfig": {
     "extends": [
@@ -54,7 +49,6 @@
   "devDependencies": {
     "axios": "^1.7.7",
     "concurrently": "^9.0.1",
-    "cross-env": "^7.0.3",
-    "regex": "^4.3.2"
+    "cross-env": "^7.0.3"
   }
 }
