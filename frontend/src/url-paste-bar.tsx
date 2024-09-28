@@ -12,12 +12,10 @@ import ResultContainer from "./result-container";
 import { OurColors } from "./theme";
 
 function isValidUrl(url: string): boolean {
-  try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
-  }
+  const urlPattern = new RegExp(
+    "^(https?://)?([a-zA-Z0-9-]+.)+[a-zA-Z]{2,}(:\\d+)?(/.*)?$"
+  );
+  return urlPattern.test(url);
 }
 
 export default function UrlPasteBar(): JSX.Element {
