@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Site Safety Checker</title>
+  <style>
+    body {
+      min-width: 200px;
+      min-height: 100px;
+      font-family: Arial, sans-serif;
+      padding: 10px;
+    }
+    input {
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 10px;
+      width: 100%;
+    }
+    #result {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h3>Check a Site</h3>
+  <input type="text" id="urlInput" placeholder="Enter URL">
+  <button id="checkButton">Check Site</button>
+  <div id="result"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
