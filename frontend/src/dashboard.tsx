@@ -32,7 +32,7 @@ export default function Dashboard(): JSX.Element {
             ? 'warning' : 'error'
 
             return (
-            <div style={{paddingBottom: '1em'}}>
+            <div style={{paddingBottom: '1em'}} key={marker.label}>
                 <Tooltip title={marker.moreInfo}>
             <Chip 
             label={marker.label}

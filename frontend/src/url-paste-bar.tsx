@@ -1,18 +1,18 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import TextField from "@mui/material/TextField";
-import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 
-import { backend_port } from "./constants";
-import Dashboard from "./dashboard";
-import ResultContainer from "./result-container";
-import { OurColors } from "./theme";
+import { backend_port } from './constants';
+import Dashboard from './dashboard';
+import ResultContainer from './result-container';
+import { OurColors } from './theme';
 
-function isValidUrl(url: string): boolean {
+export function isValidUrl(url: string): boolean {
   const urlPattern = new RegExp(
     "^(https?://)?([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}(:\\d+)?(/.*)?$"
   );
@@ -62,6 +62,8 @@ export default function UrlPasteBar(): JSX.Element {
       setFirstScanResult(undefined);
     }
   }, [urlToCheck]);
+
+  const isUrlFilled = urlToCheck && urlToCheck.length > 0
 
   return (
     <div>
