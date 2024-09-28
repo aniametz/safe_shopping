@@ -46,7 +46,7 @@ export default function UrlPasteBar(): JSX.Element {
       .then((response) => {
         console.log(response.data);
         // zero from backend indicates that the site is not blacklisted
-        const result = Number(response.data) === 0 ? true : false;
+        const result = response.data[0][0] === 0 ? true : false;
         setFirstScanResult(result);
       })
       .catch((error) => {
@@ -86,9 +86,10 @@ export default function UrlPasteBar(): JSX.Element {
             style={{ width: "40em" }}
             size="small"
             inputProps={{ spellCheck: "false" }}
-            onChange={(e) => {
+            onBlur={(e) => {
               setUrlToCheck(e.target.value);
             }}
+            onChange={() => setUrlToCheck("")}
           />
           <div style={{ paddingLeft: "0.5em" }}>
             <Tooltip title="We will search for risks on your website">
