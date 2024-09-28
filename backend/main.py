@@ -1,12 +1,12 @@
-import json
 import sqlite3
 
 from pathlib import Path
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from urllib.parse import urlparse
-from whoisapi import Client
+
+from safe_shopping.safe_shopping.backend.markers.registration_date import registration_date
+from safe_shopping.safe_shopping.backend.markers.ssl_certificate import ssl_certificate
 
 app = Flask(__name__)
 CORS(app)
@@ -16,6 +16,27 @@ def hello():
     data = request.json
     greet = data.get('greet')
     return jsonify("hello")
+
+@app.route("/calculateSiteMarkers", methods=["POST"])
+def calculate_site_markers():
+    results = {}
+
+    data = request.json
+    url = data.get("url")
+    markers = [
+        ssl_certificate,
+        registration_date
+    ]
+
+    # Check url vs each marker
+    for marker_func in markers:
+        func_name = marker_func.__name__
+        try:
+            results[func_name] = marker_func(url)
+        except Exception as e:
+            results[func_name] = False
+
+    return jsonify(results)
 
 
 @app.route("/validateAdressInDb", methods=["POST"])
@@ -44,19 +65,6 @@ def check_site():
 
     is_listed = is_site_blacklisted(url_to_check)
     return jsonify({'url': url_to_check, 'is_listed': is_listed})
-
-
-@app.route("/checkRegistrationDate", methods=['POST'])
-def check_registration_date():
-    data = request.json
-    url = data.get("url")
-    domain = urlparse(url).netloc
-    client = Client(api_key='at_VQvXEBUtXlpmOCPwvIjgR8q56mA0G')
-    result = json.loads(client.raw_data(domain))
-    registration_date = result["WhoisRecord"]["registryData"]["createdDate"]
-    expiration_date = result["WhoisRecord"]["registryData"]["expiresDate"]
-    return jsonify({'registration_date': registration_date,
-                    'expiration_date': expiration_date})
 
 
 if __name__=='__main__':

@@ -1,7 +1,7 @@
 import ssl
 import socket
 
-def check_ssl_certificate(domain: str):
+def ssl_certificate(domain: str):
     try:
         ctx = ssl.create_default_context()
         with ctx.wrap_socket(socket.socket(), server_hostname=domain) as s:
@@ -9,4 +9,5 @@ def check_ssl_certificate(domain: str):
             cert = s.getpeercert()
         return True
     except Exception as e:
-        return "SSL certificate is invalid or absent."
+        # SSL certificate is invalid or absent
+        return False
