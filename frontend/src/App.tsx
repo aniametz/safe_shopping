@@ -1,7 +1,8 @@
-import "./App.css";
+import './App.css';
 
-import { theme } from "./theme";
-import UrlPasteBar from "./url-paste-bar";
+import Navbar from './navbar';
+import { theme } from './theme';
+import UrlPasteBar from './url-paste-bar';
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
         height: "100%",
       }}
     >
+      <Navbar/>
       <UrlPasteBar />
     </div>
   );
