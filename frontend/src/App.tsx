@@ -10,7 +10,6 @@ export default function App() {
       className="App"
       style={{
         backgroundColor: theme.palette.background.default,
-        height: "100%",
       }}
     >
       <Navbar/>
