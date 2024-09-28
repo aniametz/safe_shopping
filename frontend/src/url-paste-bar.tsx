@@ -1,22 +1,36 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import TextField from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
-import { backend_port } from './constants';
-import Dashboard from './dashboard';
-import ResultContainer from './result-container';
-import { OurColors } from './theme';
+import { backend_port } from "./constants";
+import Dashboard from "./dashboard";
+import ResultContainer from "./result-container";
+import { OurColors } from "./theme";
 
 export function isValidUrl(url: string): boolean {
   const urlPattern = new RegExp(
     "^(https?://)?([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}(:\\d+)?(/.*)?$"
   );
   return urlPattern.test(url);
+}
+
+export function urlExists(url: string): boolean {
+  axios
+    .get(url)
+    .then((response) => {
+      console.log(response.status);
+      if (response.status === 200) return [true, ""];
+    })
+    .catch((error) => {
+      console.error(error);
+      return false;
+    });
+  return false;
 }
 
 export default function UrlPasteBar(): JSX.Element {
@@ -31,8 +45,10 @@ export default function UrlPasteBar(): JSX.Element {
         "Provided link is not a valid url. Please check for typos."
       );
     else {
-      setInputError("");
-      handleFirstScan();
+      if (urlExists(urlToCheck)) {
+        setInputError("");
+        handleFirstScan();
+      } else setInputError("URL does not exists or error occured.");
     }
   };
 
@@ -62,8 +78,6 @@ export default function UrlPasteBar(): JSX.Element {
       setFirstScanResult(undefined);
     }
   }, [urlToCheck]);
-
-  const isUrlFilled = urlToCheck && urlToCheck.length > 0
 
   return (
     <div>
