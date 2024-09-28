@@ -1,20 +1,20 @@
-import axios from 'axios';
-import { useState } from 'react';
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import TextField from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
-import { backend_port } from './constants';
-import Dashboard from './dashboard';
-import ResultContainer from './result-container';
-import { OurColors } from './theme';
+import { backend_port } from "./constants";
+import Dashboard from "./dashboard";
+import ResultContainer from "./result-container";
+import { OurColors } from "./theme";
 
 function isValidUrl(url: string): boolean {
   const urlPattern = new RegExp(
-    "^(https?://)?([a-zA-Z0-9-]+.)+[a-zA-Z]{2,}(:\\d+)?(/.*)?$"
+    "^(https?://)?([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}(:\\d+)?(/.*)?$"
   );
   return urlPattern.test(url);
 }
@@ -45,7 +45,8 @@ export default function UrlPasteBar(): JSX.Element {
       })
       .then((response) => {
         console.log(response.data);
-        const result = response.data as boolean;
+        // zero from backend indicates that the site is not blacklisted
+        const result = Number(response.data) === 0 ? true : false;
         setFirstScanResult(result);
       })
       .catch((error) => {
@@ -55,35 +56,58 @@ export default function UrlPasteBar(): JSX.Element {
 
   console.log({ urlToCheck });
 
+  useEffect(() => {
+    // hook to refresh state
+    if (urlToCheck === "") {
+      setFirstScanResult(undefined);
+    }
+  }, [urlToCheck]);
+
   return (
     <div>
       <Container style={{ paddingBottom: "3em" }}>
         <Typography variant="h4" style={{ padding: "1em" }}>
           Question?
         </Typography>
-        <div style={{display: 'flex', flexFlow: 'row', alignItems: 'center', justifyContent: 'center'}}>
-        <TextField
-          id="outlined-basic"
-          label="Paste link here..."
-          variant="outlined"
-          style={{width: '40em'}}
-          size='small'
-          inputProps={{ spellCheck: 'false' }}
-          onChange={(e) => {
-            setUrlToCheck(e.target.value);
+        <div
+          style={{
+            display: "flex",
+            flexFlow: "row",
+            alignItems: "center",
+            justifyContent: "center",
           }}
-        />
-        <div style={{paddingLeft: '0.5em'}}>
-          <Tooltip title='We will search for risks on your website'>
-        <Button variant="contained" color="primary" onClick={validateInputUrl}>
-          Scan for risks
-        </Button></Tooltip>
-        </div>
+        >
+          <TextField
+            id="outlined-basic"
+            label="Paste link here..."
+            variant="outlined"
+            style={{ width: "40em" }}
+            size="small"
+            inputProps={{ spellCheck: "false" }}
+            onChange={(e) => {
+              setUrlToCheck(e.target.value);
+            }}
+          />
+          <div style={{ paddingLeft: "0.5em" }}>
+            <Tooltip title="We will search for risks on your website">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={validateInputUrl}
+              >
+                Scan for risks
+              </Button>
+            </Tooltip>
+          </div>
         </div>
         <p style={{ color: OurColors.red }}>{inputError}</p>
       </Container>
-      {firstScanResult && <ResultContainer isSafe={false} url={urlToCheck ?? 'https://hello.com/123/'} />}
-      {firstScanResult && <Dashboard />}
+      {firstScanResult !== undefined && urlToCheck !== undefined && (
+        <div>
+          <ResultContainer isSafe={firstScanResult} url={urlToCheck} />
+          <Dashboard />
+        </div>
+      )}
     </div>
   );
 }
