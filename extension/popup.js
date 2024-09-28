@@ -15,16 +15,16 @@ document.getElementById('checkButton').addEventListener('click', () => {
     .then(response => response.json())
     .then(data => {
       if (data.is_listed) {
-        document.getElementById('result').innerText = 'Warning: This site is listed as dangerous!';
-        document.getElementById('result').style.color = 'red';
+        document.getElementById('result').innerText = 'Warning: This site is listed as dangerous! (Safe Shopper)';
+        document.getElementById('result').style.color = "#ff5a5f";
       } else {
-        document.getElementById('result').innerText = 'This site is safe.';
-        document.getElementById('result').style.color = 'green';
+        document.getElementById('result').innerText = 'This site is safe. (Safe Shopper)';
+        document.getElementById('result').style.color = "#a8c256";
       }
     })
     .catch(error => {
       console.error('Error:', error);
-      document.getElementById('result').innerText = 'Error checking site.';
-      document.getElementById('result').style.color = 'red';
+      document.getElementById('result').innerText = 'Error checking site. (Safe Shopper)';
+      document.getElementById('result').style.color = "#ff5a5f";
     });
 });

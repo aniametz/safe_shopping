@@ -4,7 +4,7 @@ import createTheme from '@mui/material/styles/createTheme';
 export enum OurColors {
   green = "#a8c256",
   red = "#ff5a5f",
-  black = "#172121",
+  black = "#1b132d",
   grey = "#444554",
   white = "#dae0f2",
   turquoise = "#21a0a0",
@@ -21,7 +21,9 @@ export const theme = createTheme({
         defaultProps: {
           color: OurColors.white
         }
-      }
+      },
+      // TODO: Try to overwrite this if you can (it makes url bar blue :( )
+      // MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-1eywpm9-MuiInputBase-input-MuiOutlinedInput-input
     },
     palette: {
       mode: 'dark',
