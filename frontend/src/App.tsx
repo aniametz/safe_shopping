@@ -1,6 +1,12 @@
-import Button from "@mui/material/Button";
-import axios from "axios";
-import { backend_port } from "./constants";
+import './App.css';
+
+import axios from 'axios';
+
+import Button from '@mui/material/Button';
+
+import { backend_port } from './constants';
+import { theme } from './theme';
+import UrlPasteBar from './url-paste-bar';
 
 export default function App() {
   const handleGreet = () => {
@@ -16,8 +22,9 @@ export default function App() {
       });
   };
   return (
-    <div className="App">
-      <Button onClick={handleGreet}>Click</Button>
+    <div className="App" style={{backgroundColor: theme.palette.background.default, height: '100%'}}>
+      <UrlPasteBar/>
+      <Button onClick={handleGreet} variant='contained' color='secondary'>Click</Button>
     </div>
   );
 }
