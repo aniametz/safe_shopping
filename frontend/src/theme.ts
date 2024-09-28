@@ -31,7 +31,7 @@ export const theme = createTheme({
       },
       text: {
         primary: OurColors.white,
-        secondary: OurColors.turquoise,
+        secondary: OurColors.grey,
       },
       primary: {
         // dark:,
