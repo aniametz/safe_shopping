@@ -1,7 +1,12 @@
+import json
+import sqlite3
+
+from pathlib import Path
+
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from pathlib import Path
-import sqlite3
+from urllib.parse import urlparse
+from whoisapi import Client
 
 app = Flask(__name__)
 CORS(app)
@@ -39,6 +44,20 @@ def check_site():
 
     is_listed = is_site_blacklisted(url_to_check)
     return jsonify({'url': url_to_check, 'is_listed': is_listed})
+
+
+@app.route("/checkRegistrationDate", methods=['POST'])
+def check_registration_date():
+    data = request.json
+    url = data.get("url")
+    domain = urlparse(url).netloc
+    client = Client(api_key='at_VQvXEBUtXlpmOCPwvIjgR8q56mA0G')
+    result = json.loads(client.raw_data(domain))
+    registration_date = result["WhoisRecord"]["registryData"]["createdDate"]
+    expiration_date = result["WhoisRecord"]["registryData"]["expiresDate"]
+    return jsonify({'registration_date': registration_date,
+                    'expiration_date': expiration_date})
+
 
 if __name__=='__main__':
     app.run(host='localhost', port=5000)
