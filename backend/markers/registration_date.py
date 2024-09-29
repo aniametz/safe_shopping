@@ -38,20 +38,18 @@ def check_date_difference(date_str1, date_str2):
 
     days_difference = diff.total_seconds() / (24 * 3600)
     years_difference = days_difference / 365.25  # Average days per year
-
-    if years_difference < 1:
+    if years_difference < 0.1:
         return False
-    elif 1 <= years_difference < 2:
+    elif 0.1 <= years_difference < 1:
         return 'warning'
     else:
         return True
 
 
 def registration_date(url):
-    domain = urlparse(url).netloc
     client = Client(api_key='at_VQvXEBUtXlpmOCPwvIjgR8q56mA0G')
-    result = json.loads(client.raw_data(domain))
+    result = json.loads(client.raw_data(url))
     creation_date = result["WhoisRecord"]["registryData"]["createdDate"]
-    expiration_date = result["WhoisRecord"]["registryData"]["expiresDate"]
+    current_date = datetime.now(timezone.utc).strftime('%Y.%m.%d %H:%M:%S')
 
-    return check_date_difference(creation_date, expiration_date)
+    return check_date_difference(creation_date, current_date)
