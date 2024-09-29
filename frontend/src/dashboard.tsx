@@ -1,11 +1,20 @@
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import CallIcon from '@mui/icons-material/Call';
+import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import DoneIcon from '@mui/icons-material/Done';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import GavelIcon from '@mui/icons-material/Gavel';
+import GTranslateIcon from '@mui/icons-material/GTranslate';
+import HtmlIcon from '@mui/icons-material/Html';
 import LockIcon from '@mui/icons-material/Lock';
+import MobileFriendlyIcon from '@mui/icons-material/MobileFriendly';
 import MoneyIcon from '@mui/icons-material/Money';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 import SavingsIcon from '@mui/icons-material/Savings';
+import SearchIcon from '@mui/icons-material/Search';
+import VerticalSplitIcon from '@mui/icons-material/VerticalSplit';
 import WarningIcon from '@mui/icons-material/Warning';
 import { Chip, Container, Typography } from '@mui/material';
 
@@ -31,7 +40,16 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
     {label: 'Prices are reasonable', icon: <MoneyIcon/>},
     {label: 'Prices currency is region-appropriate ', icon: <AttachMoneyIcon/>},
     {label: 'Store contact details available', icon: <CallIcon/>},
-    {label: 'Suspicious payment page', icon: <SavingsIcon/>}
+    {label: 'Suspicious payment page', icon: <SavingsIcon/>},
+    {label: 'HTML tags are not deprecated', icon: <HtmlIcon/>},
+    {label: 'No redirections through several domains', icon: <ChangeCircleIcon/>},
+    {label: 'Company registration number or VAT number available', icon: <ReceiptIcon/>},
+    {label: 'Site is optimized for mobile devices', icon: <MobileFriendlyIcon/>},
+    {label: 'Store design is modern', icon: <VerticalSplitIcon/>},
+    {label: 'Store social media available', icon: <FacebookIcon/>},
+    {label: 'Terms & conditions available on website', icon: <GavelIcon/>},
+    {label: 'Text does not appear awkward or machine-learning translated', icon: <GTranslateIcon/>},
+    {label: 'Site appears in search engine results', icon: <SearchIcon/>}
   ]
 
   return (
