@@ -5,8 +5,13 @@ from pathlib import Path
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
+from backend.markers.default_shop_currency import default_shop_currency
+from backend.markers.payment_page import payment_page
+from backend.markers.prices_benchmark import prices_benchmark
 from backend.markers.registration_date import registration_date
 from backend.markers.ssl_certificate import ssl_certificate
+from backend.markers.store_contact_details import store_contact_details
+from backend.utils.mappings import marker_enum
 
 app = Flask(__name__)
 CORS(app)
@@ -25,12 +30,16 @@ def calculate_site_markers():
     url = data.get("url")
     markers = [
         ssl_certificate,
-        registration_date
+        default_shop_currency,
+        payment_page,
+        registration_date,
+        prices_benchmark,
+        store_contact_details
     ]
 
     # Check url vs each marker
     for marker_func in markers:
-        func_name = marker_func.__name__
+        func_name = marker_enum[marker_func]
         try:
             results[func_name] = marker_func(url)
         except Exception as e:
