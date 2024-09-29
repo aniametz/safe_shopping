@@ -26,7 +26,13 @@ export interface DashboardProps {
 
 export default function Dashboard(props: DashboardProps): JSX.Element {
   const { markers } = props;
-  console.log({markers})
+  
+  const markersGrouped = []
+  const chunkSize = 3;
+  for (let i = 0; i < markers.length; i += chunkSize) {
+    const chunk = markers.slice(i, i + chunkSize);
+    markersGrouped.push(chunk)
+}
 
   const chipColorMapping = [
     { status: true, icon: <DoneIcon />, color: "success" },
@@ -58,8 +64,10 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
         How we know this:
       </Typography>
       <div style={{ display: "flex", flexFlow: "column" }}>
-        {markers &&
-          markers.map((marker) => {
+        {markersGrouped.map((group, index) => {
+          console.log({group}) 
+          return <div key={index} style={{display: 'flex', flexFlow: 'row', alignItems: 'center', justifyContent: 'center'}}>
+            {group.map(((marker) => {
             const chipColorAttributes = chipColorMapping.find(
               (chipMap) => chipMap.status === marker.status
             );
@@ -74,7 +82,7 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
             const chipIcon = chipIconMapping.find((iconMap) => iconMap.label === marker.label)?.icon
 
             return (
-              <div style={{ paddingBottom: "1em" }} key={marker.label}>
+              <div style={{ paddingBottom: "1em", paddingLeft: '0.5em' }} key={marker.label}>
                 <Chip
                   label={marker.label}
                   icon={chipIcon}
@@ -84,7 +92,7 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
                 />
               </div>
             );
-          })}
+          }))}</div>})}
       </div>
     </Container>
   );
