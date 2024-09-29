@@ -8,9 +8,9 @@ from backend.markers.ssl_certificate import ssl_certificate
 from backend.markers.store_contact_details import store_contact_details
 
 marker_enum = {
-    ssl_certificate: "SSL certificate validity",
-    registration_date: "Recent domain registration date",
-    default_shop_currency: "Prices currency",
+    ssl_certificate: "SSL certificate is valid",
+    registration_date: "Domain registration date is too recent",
+    default_shop_currency: "Prices currency is region-appropriate ",
     payment_page: "Suspicious payment page",
     store_contact_details: "Store contact details available",
     prices_benchmark: "Prices are reasonable"
