@@ -6,7 +6,7 @@ import { theme } from './theme';
 
 export default function ExtensionProposal(): JSX.Element {
     return (
-        <AppBar position="fixed" sx={{ top: 'auto', bottom: 0, background: theme.palette.background.default }}>
+        <AppBar position="fixed" elevation={0} sx={{ top: 'auto', bottom: 0, background: theme.palette.background.default }}>
         <div style={{
         display: 'flex', justifyContent: 'center', paddingBottom: '2em',
          alignItems: 'center'
