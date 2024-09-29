@@ -1,17 +1,17 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import TextField from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
-import { backend_port } from './constants';
-import Dashboard from './dashboard';
-import ExtensionProposal from './extension-proposal';
-import ResultContainer from './result-container';
-import { OurColors } from './theme';
+import { backend_port, MarkerType } from "./constants";
+import Dashboard from "./dashboard";
+import ExtensionProposal from "./extension-proposal";
+import ResultContainer from "./result-container";
+import { OurColors } from "./theme";
 
 export function isValidUrl(url: string): boolean {
   const urlPattern = new RegExp(
@@ -24,6 +24,8 @@ export default function UrlPasteBar(): JSX.Element {
   const [urlToCheck, setUrlToCheck] = useState<string>();
   const [inputError, setInputError] = useState<string>();
   const [firstScanResult, setFirstScanResult] = useState<boolean>();
+  const [markers, setMarkers] = useState<MarkerType[]>();
+  const [score, setScore] = useState<number>();
 
   const validateInputUrl = () => {
     if (!urlToCheck) setInputError("Provided link is empty");
@@ -49,10 +51,38 @@ export default function UrlPasteBar(): JSX.Element {
         // zero from backend indicates that the site is not blacklisted
         const result = response.data[0][0] === 0 ? true : false;
         setFirstScanResult(result);
+        getMarkers(result);
       })
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  const getMarkers = (isSafe: boolean) => {
+    if (!isSafe) setMarkers([{ label: "blacklisted", status: false }]);
+    else
+      axios
+        .post(backend_port + "calculateSiteMarkers", {
+          url: urlToCheck,
+        })
+        .then((response) => {
+          console.log(response.data);
+          const result = Object.entries(response.data).map(
+            ([key, value]) => ({ label: key, status: value } as MarkerType)
+          );
+          console.log({ result });
+          setMarkers(result);
+
+          // calculate safety score
+          const positiveMarkers = result.filter(
+            (marker) => marker.status === true
+          ).length;
+          const allMarkers = result.length;
+          setScore((positiveMarkers / allMarkers) * 100);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
   };
 
   console.log({ urlToCheck });
@@ -61,6 +91,7 @@ export default function UrlPasteBar(): JSX.Element {
     // hook to refresh state
     if (urlToCheck === "") {
       setFirstScanResult(undefined);
+      setMarkers([]);
     }
   }, [urlToCheck]);
 
@@ -104,13 +135,19 @@ export default function UrlPasteBar(): JSX.Element {
         </div>
         <p style={{ color: OurColors.red }}>{inputError}</p>
       </Container>
-      {firstScanResult !== undefined && urlToCheck !== undefined && (
-        <div>
-          <ResultContainer isSafe={firstScanResult} url={urlToCheck} />
-          <Dashboard isSafe={firstScanResult} url={urlToCheck} />
-        </div>
-      )}
-      {firstScanResult !== undefined && <ExtensionProposal/>}
+      {firstScanResult !== undefined &&
+        urlToCheck !== undefined &&
+        score !== undefined && (
+          <div>
+            <ResultContainer
+              isSafe={firstScanResult}
+              safetyScore={score}
+              url={urlToCheck}
+            />
+            {markers && <Dashboard markers={markers} />}
+          </div>
+        )}
+      {firstScanResult !== undefined && <ExtensionProposal />}
     </div>
   );
 }

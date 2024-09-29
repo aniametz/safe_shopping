@@ -2,43 +2,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
 import WarningIcon from "@mui/icons-material/Warning";
 import { Chip, Container, Typography } from "@mui/material";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { backend_port } from "./constants";
-
-interface MarkerType {
-  label: string;
-  status: string | boolean;
-}
+import { MarkerType } from "./constants";
 
 export interface DashboardProps {
-  readonly isSafe: boolean;
-  readonly url: string;
+  readonly markers: MarkerType[];
 }
 
 export default function Dashboard(props: DashboardProps): JSX.Element {
-  const { isSafe, url } = props;
-  const [markers, setMarkers] = useState<MarkerType[]>();
-
-  useEffect(() => {
-    if (!isSafe) setMarkers([{ label: "blacklisted", status: false }]);
-    else
-      axios
-        .post(backend_port + "calculateSiteMarkers", {
-          url: url,
-        })
-        .then((response) => {
-          console.log(response.data);
-          const result = Object.entries(response.data).map(
-            ([key, value]) => ({ label: key, status: value } as MarkerType)
-          );
-          console.log({ result });
-          setMarkers(result);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-  }, [isSafe, url]);
+  const { markers } = props;
 
   const chipMapping = [
     { status: true, icon: <DoneIcon />, color: "success" },
