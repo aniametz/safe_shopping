@@ -81,8 +81,7 @@ def validate_address_in_db():
     return result
 
 def is_site_blacklisted(url_to_check):
-    # TODO: get it from DB
-    blacklisted_sites = ['https://allegro.pl/']
+    blacklisted_sites = ['https://www.bycicle.net/pl/', 'https://www.butyjonakparis.com/']
     return url_to_check.lower() in [site.lower() for site in blacklisted_sites]
 
 @app.route('/check_site', methods=['POST'])
