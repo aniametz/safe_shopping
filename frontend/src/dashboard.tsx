@@ -1,7 +1,11 @@
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import CallIcon from '@mui/icons-material/Call';
 import CloseIcon from '@mui/icons-material/Close';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import DoneIcon from '@mui/icons-material/Done';
 import LockIcon from '@mui/icons-material/Lock';
+import MoneyIcon from '@mui/icons-material/Money';
+import SavingsIcon from '@mui/icons-material/Savings';
 import WarningIcon from '@mui/icons-material/Warning';
 import { Chip, Container, Typography } from '@mui/material';
 
@@ -22,10 +26,13 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
   ];
 
   const chipIconMapping = [
-    {label: 'registration_date', icon: <DateRangeIcon/>},
-    {label: 'ssl_certificate', icon: <LockIcon/>}
+    {label: 'Domain registration date is too recent', icon: <DateRangeIcon/>},
+    {label: 'SSL certificate is valid', icon: <LockIcon/>},
+    {label: 'Prices are reasonable', icon: <MoneyIcon/>},
+    {label: 'Prices currency is region-appropriate ', icon: <AttachMoneyIcon/>},
+    {label: 'Store contact details available', icon: <CallIcon/>},
+    {label: 'Suspicious payment page', icon: <SavingsIcon/>}
   ]
-
 
   return (
     <Container style={{ paddingBottom: "5em" }}>
