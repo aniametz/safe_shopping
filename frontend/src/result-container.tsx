@@ -1,12 +1,10 @@
-import DangerousIcon from "@mui/icons-material/Dangerous";
-import LocalPoliceIcon from "@mui/icons-material/LocalPolice";
-import { Container, LinearProgress, Typography } from "@mui/material";
+import DangerousIcon from '@mui/icons-material/Dangerous';
+import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
+import { Container, LinearProgress, Typography } from '@mui/material';
 
-import { theme } from "./theme";
-import { isValidUrl } from "./url-paste-bar";
+import { isValidUrl } from './url-paste-bar';
 
 export interface ResultContainerProps {
-  readonly isSafe: boolean;
   readonly safetyScore: number;
   readonly url: string;
 }
@@ -14,7 +12,7 @@ export interface ResultContainerProps {
 export default function ResultContainer(
   props: ResultContainerProps
 ): JSX.Element {
-  const { isSafe, safetyScore, url } = props;
+  const { safetyScore, url } = props;
 
   const isValid = isValidUrl(url);
   if (!isValid) return <></>;
@@ -23,7 +21,8 @@ export default function ResultContainer(
   const urlWithHttp = isUrlWithHttp ? url : "http://" + url;
   const websiteName = new URL(urlWithHttp).hostname;
 
-  // TODO change message based on safety score
+  const isSafe = safetyScore === 100
+
   const message = isSafe
     ? `We have scanned ${websiteName} and it's safe!`
     : `We suspect ${websiteName} is dangerous, better to not shop there.`;
@@ -47,11 +46,11 @@ export default function ResultContainer(
         </div>
         <Typography
           variant="h6"
-          style={{
-            color: isSafe
-              ? theme.palette.success.main
-              : theme.palette.error.main,
-          }}
+        //   style={{
+        //     color: isSafe
+        //       ? theme.palette.success.main
+        //       : theme.palette.error.main,
+        //   }}
         >
           {message}
         </Typography>

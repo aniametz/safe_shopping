@@ -1,17 +1,17 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import TextField from "@mui/material/TextField";
-import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 
-import { backend_port, MarkerType } from "./constants";
-import Dashboard from "./dashboard";
-import ExtensionProposal from "./extension-proposal";
-import ResultContainer from "./result-container";
-import { OurColors } from "./theme";
+import { backend_port, MarkerType } from './constants';
+import Dashboard from './dashboard';
+import ExtensionProposal from './extension-proposal';
+import ResultContainer from './result-container';
+import { OurColors } from './theme';
 
 export function isValidUrl(url: string): boolean {
   const urlPattern = new RegExp(
@@ -140,7 +140,6 @@ export default function UrlPasteBar(): JSX.Element {
         score !== undefined && (
           <div>
             <ResultContainer
-              isSafe={firstScanResult}
               safetyScore={score}
               url={urlToCheck}
             />

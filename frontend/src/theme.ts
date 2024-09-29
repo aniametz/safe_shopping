@@ -22,7 +22,7 @@ export const theme = createTheme({
           color: OurColors.white
         }
       },
-      // TODO: Try to overwrite this if you can (it makes url bar blue :( )
+      // Try to overwrite this if you can (it makes url bar blue when filled from autofill suggestions (browser default) )
       // MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-1eywpm9-MuiInputBase-input-MuiOutlinedInput-input
     },
     palette: {
