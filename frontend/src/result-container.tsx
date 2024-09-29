@@ -25,7 +25,7 @@ export default function ResultContainer(
 
   const message = isSafe
     ? `We have scanned ${websiteName} and it's safe!`
-    : `We suspect ${websiteName} is dangerous, better to not shop there.`;
+    : `We suspect ${websiteName} to be dangerous, better not to shop there.`;
 
   return (
     <Container style={{ paddingBottom: "3em" }}>

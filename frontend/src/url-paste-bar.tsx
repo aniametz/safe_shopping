@@ -97,9 +97,9 @@ export default function UrlPasteBar(): JSX.Element {
 
   return (
     <div>
-      <Container style={{ paddingBottom: "3em" }}>
+      <Container style={{ paddingBottom: "4em", paddingTop: '5em' }}>
         <Typography variant="h4" style={{ padding: "1em" }}>
-          Question?
+          Is it safe to shop here?
         </Typography>
         <div
           style={{
