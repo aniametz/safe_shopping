@@ -1,8 +1,11 @@
-import CloseIcon from "@mui/icons-material/Close";
-import DoneIcon from "@mui/icons-material/Done";
-import WarningIcon from "@mui/icons-material/Warning";
-import { Chip, Container, Typography } from "@mui/material";
-import { MarkerType } from "./constants";
+import CloseIcon from '@mui/icons-material/Close';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import DoneIcon from '@mui/icons-material/Done';
+import LockIcon from '@mui/icons-material/Lock';
+import WarningIcon from '@mui/icons-material/Warning';
+import { Chip, Container, Typography } from '@mui/material';
+
+import { MarkerType } from './constants';
 
 export interface DashboardProps {
   readonly markers: MarkerType[];
@@ -10,12 +13,19 @@ export interface DashboardProps {
 
 export default function Dashboard(props: DashboardProps): JSX.Element {
   const { markers } = props;
+  console.log({markers})
 
-  const chipMapping = [
+  const chipColorMapping = [
     { status: true, icon: <DoneIcon />, color: "success" },
     { status: "warning", icon: <WarningIcon />, color: "warning" },
     { status: false, icon: <CloseIcon />, color: "error" },
   ];
+
+  const chipIconMapping = [
+    {label: 'registration_date', icon: <DateRangeIcon/>},
+    {label: 'ssl_certificate', icon: <LockIcon/>}
+  ]
+
 
   return (
     <Container style={{ paddingBottom: "5em" }}>
@@ -25,22 +35,24 @@ export default function Dashboard(props: DashboardProps): JSX.Element {
       <div style={{ display: "flex", flexFlow: "column" }}>
         {markers &&
           markers.map((marker) => {
-            const chipAttributes = chipMapping.find(
+            const chipColorAttributes = chipColorMapping.find(
               (chipMap) => chipMap.status === marker.status
             );
             // I was forced by TypeScript to do this, I'm sorry
             const chipColor =
-              chipAttributes?.color === "success"
+            chipColorAttributes?.color === "success"
                 ? "success"
-                : chipAttributes?.color === "warning"
+                : chipColorAttributes?.color === "warning"
                 ? "warning"
                 : "error";
+
+            const chipIcon = chipIconMapping.find((iconMap) => iconMap.label === marker.label)?.icon
 
             return (
               <div style={{ paddingBottom: "1em" }} key={marker.label}>
                 <Chip
                   label={marker.label}
-                  icon={chipAttributes?.icon}
+                  icon={chipIcon}
                   color={chipColor}
                   style={{ maxWidth: "40em" }}
                   variant="outlined"
