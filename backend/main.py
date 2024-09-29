@@ -5,8 +5,8 @@ from pathlib import Path
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from safe_shopping.safe_shopping.backend.markers.registration_date import registration_date
-from safe_shopping.safe_shopping.backend.markers.ssl_certificate import ssl_certificate
+from backend.markers.registration_date import registration_date
+from backend.markers.ssl_certificate import ssl_certificate
 
 app = Flask(__name__)
 CORS(app)
