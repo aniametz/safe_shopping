@@ -1,16 +1,27 @@
 import sqlite3
 
 from pathlib import Path
+from collections import OrderedDict
+
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
+from backend.markers.code_quality import code_quality
 from backend.markers.default_shop_currency import default_shop_currency
+from backend.markers.language_consistency import language_consistency
+from backend.markers.mobile_devices_support import mobile_devices_support
+from backend.markers.multiple_redirections import multiple_redirections
 from backend.markers.payment_page import payment_page
 from backend.markers.prices_benchmark import prices_benchmark
 from backend.markers.registration_date import registration_date
+from backend.markers.regulatory_compliance import regulatory_compliance
+from backend.markers.site_available_in_engine_results import site_available_in_engine_results
 from backend.markers.ssl_certificate import ssl_certificate
 from backend.markers.store_contact_details import store_contact_details
+from backend.markers.store_social_media_available import store_social_media_available
+from backend.markers.terms_and_conditions_available import terms_and_conditions_available
+from backend.markers.webite_design_quality import website_design_quality
 from backend.utils.mappings import marker_enum
 
 app = Flask(__name__)
@@ -24,7 +35,7 @@ def hello():
 
 @app.route("/calculateSiteMarkers", methods=["POST"])
 def calculate_site_markers():
-    results = {}
+    results = OrderedDict()
 
     data = request.json
     url = data.get("url")
@@ -34,7 +45,16 @@ def calculate_site_markers():
         payment_page,
         registration_date,
         prices_benchmark,
-        store_contact_details
+        store_contact_details,
+        terms_and_conditions_available,
+        website_design_quality,
+        mobile_devices_support,
+        site_available_in_engine_results,
+        store_social_media_available,
+        language_consistency,
+        regulatory_compliance,
+        multiple_redirections,
+        code_quality
     ]
 
     # Check url vs each marker
@@ -44,8 +64,8 @@ def calculate_site_markers():
             results[func_name] = marker_func(url)
         except Exception as e:
             results[func_name] = False
-
-    return jsonify(results)
+    ordered_results = dict(results)
+    return jsonify(ordered_results)
 
 
 @app.route("/validateAdressInDb", methods=["POST"])
