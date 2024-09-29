@@ -20,20 +20,6 @@ export function isValidUrl(url: string): boolean {
   return urlPattern.test(url);
 }
 
-export function urlExists(url: string): boolean {
-  axios
-    .get(url)
-    .then((response) => {
-      console.log(response.status);
-      if (response.status === 200) return [true, ""];
-    })
-    .catch((error) => {
-      console.error(error);
-      return false;
-    });
-  return false;
-}
-
 export default function UrlPasteBar(): JSX.Element {
   const [urlToCheck, setUrlToCheck] = useState<string>();
   const [inputError, setInputError] = useState<string>();
@@ -46,10 +32,8 @@ export default function UrlPasteBar(): JSX.Element {
         "Provided link is not a valid url. Please check for typos."
       );
     else {
-      if (urlExists(urlToCheck)) {
-        setInputError("");
-        handleFirstScan();
-      } else setInputError("URL does not exists or error occured.");
+      setInputError("");
+      handleFirstScan();
     }
   };
 
@@ -123,7 +107,7 @@ export default function UrlPasteBar(): JSX.Element {
       {firstScanResult !== undefined && urlToCheck !== undefined && (
         <div>
           <ResultContainer isSafe={firstScanResult} url={urlToCheck} />
-          <Dashboard />
+          <Dashboard isSafe={firstScanResult} url={urlToCheck} />
         </div>
       )}
       {firstScanResult !== undefined && <ExtensionProposal/>}
